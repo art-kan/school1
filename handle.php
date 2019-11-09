@@ -38,7 +38,7 @@ function handle_request($_REQUEST_DATA, $_BODY, $_PARAMS) {
     case 'auth': return auth_admin($_BODY);
     case 'uploadimage': return upload_image($_BODY);
     case 'getpost': return send_post($_PARAMS);
-    case 'listpost': return send_posts_list();
+    case 'listposts': return send_posts_list();
     case 'deletepost': return delete_post($_BODY);
     case 'newpost': return create_post($_BODY);
     case 'editpost': return update_post($_BODY);
