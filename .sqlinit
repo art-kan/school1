@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS admin
+(
+  s_key               char(128),
+  s_key_expire_date   date,
+  pwd_hash            varchar(128) NOT NULL DEFAULT '$argon2i$v=19$m=65536,t=4,p=1$aGxnLmtmZ1lxaFEyZTZERw$m3Q4O0LVzyKARq0WBFefW9stXUyhW2J/5xnwqP+XYGg'
+)

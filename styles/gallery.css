@@ -1,0 +1,121 @@
+.gallery-section .container {
+  max-width: 90vw;
+}
+
+.header-banner {
+  width: 100%;
+  height: 60vh;
+  background: url(../img/baim-hanif-pYWuOMhtc6k-unsplash.jpg) no-repeat center / cover;
+}
+
+.gallery-heading-box h2 {
+  text-align: center;
+  font-size: 30px;
+  color: #343F64;
+  margin: 70px 0 60px;
+}
+
+.gallery {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.photo {
+  margin: 5px;
+  cursor: pointer;
+  max-width: 40vw;
+}
+
+.photo:hover {
+  z-index: 2;
+}
+
+.photo-img {
+  position: relative;
+  display: block;
+  margin: auto;
+  object-fit: cover;
+  transition: all .5s;
+  box-shadow: 0 0 0 0 #fff;
+}
+
+.photo:hover .photo-img {
+  box-shadow: 0 0 30px 0 rgba(0, 0, 0, .7);
+}
+
+.gallery-popup {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  min-height: 100vh;
+  z-index: 999;
+  transform: translateX(-100%);
+  background: rgba(0, 0, 0, 0);
+  transition: all .5s, background .3s;
+  padding: 3vh 5vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.gallery-popup.show {
+  transform: translateX(0%);
+  background: rgba(0, 0, 0, .8);
+}
+
+.popup-wrapper {
+  max-height: 100%;
+  position: relative;
+}
+
+.popup-img-box {
+  max-width: 100%;
+}
+
+.popup-img-box img {
+  max-height: 90vh;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+}
+
+.popup-desc {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: .8em 5%;
+  font-size: 18px;
+  font-weight: lighter;
+  background: rgba(0, 0, 0, .3);
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media screen and (max-width: 800px) {
+  .popup-desc {
+    font-size: 16px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .gallery-popup {
+    padding: 7vh 10vw;
+  }
+
+  .photo {
+    max-width: initial;
+  }
+
+  .popup-desc {
+    font-size: 14px;
+  }
+}
