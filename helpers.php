@@ -26,6 +26,9 @@ $HASH_ALGO = @constant('PASSWORD_ARGON2ID')
 $script_name = $_SERVER['SCRIPT_NAME'];
 $script_name = substr($script_name, 1, strlen($script_name) - 5);
 
+$PROTOCOL = stripos($_SERVER['SERVER_PROTOCOL'], 'https') === 0
+  ? 'https://' : 'http://';
+
 $purifier_config = HTMLPurifier_Config::createDefault();
 $purifier_config->set('Core.Encoding', 'UTF-8');
 

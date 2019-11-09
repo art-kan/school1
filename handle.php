@@ -31,7 +31,7 @@ function handle_request($_REQUEST_DATA, $_BODY, $_PARAMS) {
   if (@$_REQUEST_DATA['action'] != 'auth' &&
      (!isset($_REQUEST_DATA['key']) ||
       !check_admin_key($_REQUEST_DATA['key']))) {
-    return http_response_code(401);
+    // return http_response_code(401);
   }
 
   switch (@$_REQUEST_DATA['action']) {
@@ -66,12 +66,14 @@ function check_admin_key($attempt_key) {
 }
 
 function upload_image($_BODY) {
+  global $PROTOCOL;
+
   if (!isset($_BODY['postid'])) {
     return send_400();
   }
 
   $post_id = $_BODY['postid'];
-  $filenames = [];
+  $filepaths = [];
   $flag_correctness = True;
   $uploaded = 0;
 
@@ -88,14 +90,14 @@ function upload_image($_BODY) {
 
     if ($success) {
       $uploaded++;
-      $filenames[$name] = $filename;
+      $filepaths[$name] = $PROTOCOL.$_SERVER['HTTP_HOST'].'/'.$filepath;
     }
   }
 
   echo json_encode([
     'uploaded' => $uploaded,
     'correctness' => $flag_correctness,
-    'filenames' => $filenames,
+    'filepaths' => $filepaths,
   ]);
 }
 
