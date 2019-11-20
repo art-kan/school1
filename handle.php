@@ -61,7 +61,7 @@ function auth_admin($_BODY) {
 
   if ($is_admin) {
     $key = generate_crypto_key(ADMIN_KEY_BYTES);
-    new_admin_key($key, ADMIN_KEY_EXPIRE_DAYS);
+    new_admin_key($key);
     echo json_encode(['key' => $key, 'ok' => 1]);
   } else {
     echo json_encode(['ok' => 0]);
@@ -73,7 +73,14 @@ function check_admin($_BODY) {
 }
 
 function check_admin_key($attempt_key) {
-  return get_admin_key() == $attempt_key;
+  $data = get_admin_key();
+  $creat_time = strtotime($data['s_key_creation_time']);
+  $expire_time = $creat_time + 1000 * sec_per_day * ADMIN_KEY_EXPIRE_DAYS;
+
+  if ($expire_time <= time()) {
+    return False;
+  }
+  return $data['s_key'] === $attempt_key;
 }
 
 function upload_image($_BODY) {

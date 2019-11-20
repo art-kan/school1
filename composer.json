@@ -1,6 +1,7 @@
 {
     "require": {
         "ezyang/htmlpurifier": "^4.12",
-        "paquettg/php-html-parser": "^2.1"
+        "paquettg/php-html-parser": "^2.1",
+        "phpmailer/phpmailer": "^6.1"
     }
 }

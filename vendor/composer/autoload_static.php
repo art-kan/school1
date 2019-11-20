@@ -13,11 +13,16 @@ class ComposerStaticInitba7eb1810ac5855e7b857813cd597f7b
     public static $prefixLengthsPsr4 = array (
         'P' => 
         array (
+            'PHPMailer\\PHPMailer\\' => 20,
             'PHPHtmlParser\\' => 14,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
+        'PHPMailer\\PHPMailer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
+        ),
         'PHPHtmlParser\\' => 
         array (
             0 => __DIR__ . '/..' . '/paquettg/php-html-parser/src/PHPHtmlParser',

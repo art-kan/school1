@@ -49,8 +49,8 @@ function get_admin_password_hash() {
 
 function get_admin_key() {
   global $db;
-  $result = $db->query('SELECT s_key, s_key_expire_date FROM admin LIMIT 1');
-  return $result->fetch_assoc()['s_key'];
+  $result = $db->query('SELECT s_key, s_key_creation_time FROM admin LIMIT 1');
+  return $result->fetch_assoc();
 }
 
 // CREATE
@@ -120,12 +120,9 @@ function edit_contacts($contacts) {
   return sql_prepare($query, $types, ...$params);
 }
 
-function new_admin_key($key, $num_days) {
-  $now = time();
-  $then = ($now + $num_days * sec_per_day) % sec_per_day;
-  $expire_date = date('Y-m-d', $then);
-  $query = 'UPDATE admin SET s_key = ?, s_key_expire_date = ?';
-  sql_prepare($query, 'ss', $key, $expire_date);
+function new_admin_key($key) {
+  $query = 'UPDATE admin SET s_key = ?, s_key_creation_time = NOW()';
+  sql_prepare($query, 's', $key);
 }
 
 // DELETE

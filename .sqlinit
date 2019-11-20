@@ -1,6 +1,22 @@
-CREATE TABLE IF NOT EXISTS admin
-(
-  s_key               char(128),
-  s_key_expire_date   date,
-  pwd_hash            varchar(128) NOT NULL DEFAULT '$argon2i$v=19$m=65536,t=4,p=1$aGxnLmtmZ1lxaFEyZTZERw$m3Q4O0LVzyKARq0WBFefW9stXUyhW2J/5xnwqP+XYGg'
+CREATE TABLE IF NOT EXISTS `admin` (
+  `s_key` char(128) DEFAULT NULL,
+  `s_key_creation_time` datetime DEFAULT CURRENT_TIMESTAMP,
+  `pwd_hash` varchar(128) NOT NULL DEFAULT '$argon2i$v=19$m=65536,t=4,p=1$M1pOT2RGalRxbTZHcDhSVA$d/qZiDAq7Qij8mdrJg47RDbbTG4RXIKKKpN21fddD98'
+)
+
+CREATE TABLE IF NOT EXISTS `contacts` (
+  `copyright` varchar(100) CHARACTER SET utf8mb4 NOT NULL,
+  `tel` varchar(13) NOT NULL,
+  `gmail` varchar(320) NOT NULL,
+  `address` varchar(300) CHARACTER SET utf8mb4 NOT NULL,
+  `telegram` varchar(56) DEFAULT NULL,
+  `instagram` varchar(56) DEFAULT NULL
+)
+CREATE TABLE IF NOT EXISTS `posts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(200) CHARACTER SET utf8mb4 NOT NULL,
+  `text` text CHARACTER SET utf8mb4 NOT NULL,
+  `date` date NOT NULL,
+  `preview_url` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 )
