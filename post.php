@@ -16,6 +16,11 @@
         <h2 class="post-name"><?= s($post['title']); ?></h2>
         <div class="post-date"><?= s(format_date($post['date'])); ?></div>
       </header>
+      <?php if ($post['preview_url'] != Null): ?>
+        <div class="post-preview">
+          <img src="<?= s($post['preview_url']); ?>" alt="">
+        </div>
+      <?php endif; ?>
       <div class="post-body"><?= purify($post['text']); ?></div>
     </section>
   </div>

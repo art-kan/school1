@@ -54,28 +54,47 @@ function get_admin_key() {
 }
 
 // CREATE
-function new_post($title, $text) {
-  $query = 'INSERT INTO posts (title, text, date) VALUES (?, ?, ?)';
+function new_post($title, $text, $preview_url) {
+  global $db;
   $date = date('Y-m-d', time());
-  sql_prepare($query, 'sss', $title, $text, $date);
+  if ($preview_url == Null) {
+    $query = 'INSERT INTO posts (title, text, date)'
+    .' VALUES (?, ?, ?)';
+    sql_prepare($query, 'sss', $title, $text, $date);
+  } else {
+    $query = 'INSERT INTO posts (title, text, date, preview_url)'
+      .' VALUES (?, ?, ?, ?)';
+    sql_prepare($query, 'ssss', $title, $text, $date, $preview_url);
+  }
+  return $db->insert_id;
 }
 
 // UPDATE
-function edit_post($id, $title, $text) {
+function edit_post($id, $title, $text, $preview_url) {
   $query = 'UPDATE posts SET';
   $params = [];
   $types = '';
+  $comma_req = 0;
 
   if ($title != Null) {
     $query .= ' title = ?';
     $params[] = $title;
     $types .= 's';
+    $comma_req = 1;
   }
 
   if ($text != Null) {
-    if ($title != Null) $query .= ',';
+    if ($comma_req) $query .= ',';
     $query .= ' text = ?';
     $params[] = $text;
+    $types .= 's';
+    $comma_req = 1;
+  }
+
+  if ($preview_url != Null) {
+    if ($comma_req) $query .= ',';
+    $query .= ' preview_url = ?';
+    $params[] = $preview_url;
     $types .= 's';
   }
 

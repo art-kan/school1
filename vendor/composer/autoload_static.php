@@ -10,7 +10,28 @@ class ComposerStaticInitba7eb1810ac5855e7b857813cd597f7b
         '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
     );
 
+    public static $prefixLengthsPsr4 = array (
+        'P' => 
+        array (
+            'PHPHtmlParser\\' => 14,
+        ),
+    );
+
+    public static $prefixDirsPsr4 = array (
+        'PHPHtmlParser\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/paquettg/php-html-parser/src/PHPHtmlParser',
+        ),
+    );
+
     public static $prefixesPsr0 = array (
+        's' => 
+        array (
+            'stringEncode' => 
+            array (
+                0 => __DIR__ . '/..' . '/paquettg/string-encode/src',
+            ),
+        ),
         'H' => 
         array (
             'HTMLPurifier' => 
@@ -23,6 +44,8 @@ class ComposerStaticInitba7eb1810ac5855e7b857813cd597f7b
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
+            $loader->prefixLengthsPsr4 = ComposerStaticInitba7eb1810ac5855e7b857813cd597f7b::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitba7eb1810ac5855e7b857813cd597f7b::$prefixDirsPsr4;
             $loader->prefixesPsr0 = ComposerStaticInitba7eb1810ac5855e7b857813cd597f7b::$prefixesPsr0;
 
         }, null, ClassLoader::class);

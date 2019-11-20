@@ -31,6 +31,8 @@ $PROTOCOL = stripos($_SERVER['SERVER_PROTOCOL'], 'https') === 0
 
 $purifier_config = HTMLPurifier_Config::createDefault();
 $purifier_config->set('Core.Encoding', 'UTF-8');
+$purifier_config->set('HTML.SafeIframe', true);
+$purifier_config->set('URI.SafeIframeRegexp', '%^(https?:)?//(www\.youtube(?:-nocookie)?\.com/embed/|player\.vimeo\.com/video/)%');
 
 $purifier = new HTMLPurifier($purifier_config);
 
@@ -40,6 +42,7 @@ $purifier = new HTMLPurifier($purifier_config);
  * $_REQUEST_DATA - array_merge($_PARAMS, $_BODY)
  */
 parse_str(@$_SERVER['QUERY_STRING'] ?: '', $_PARAMS);
+
 
 if ($_POST) {
   $_BODY = $_POST;
@@ -140,6 +143,7 @@ function sql_prepare($template, $params_type, ...$params) {
 function hash_password($string) {
   global $HASH_ALGO;
   $full_hash = password_hash($string, $HASH_ALGO);
+  return $full_hash;
 }
 
 function check_password($hash, $att_pwd) {
@@ -154,6 +158,13 @@ function generate_crypto_key($bytes) {
     $key = openssl_random_pseudo_bytes($bytes, $is_crypto);
   }
   return bin2hex($key);
+}
+
+function is_our_link($url) {
+  $host_of_preview = parse_url($url, PHP_URL_HOST);
+  $our_host = $_SERVER['SERVER_NAME'];
+
+  return $host_of_preview != $our_host;
 }
 
 ?>
