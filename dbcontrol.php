@@ -56,15 +56,14 @@ function get_admin_key() {
 // CREATE
 function new_post($title, $text, $preview_url) {
   global $db;
-  $date = date('Y-m-d', time());
   if ($preview_url == Null) {
     $query = 'INSERT INTO posts (title, text, date)'
-    .' VALUES (?, ?, ?)';
-    sql_prepare($query, 'sss', $title, $text, $date);
+    .' VALUES (?, ?, NOW())';
+    sql_prepare($query, 'ss', $title, $text);
   } else {
     $query = 'INSERT INTO posts (title, text, date, preview_url)'
-      .' VALUES (?, ?, ?, ?)';
-    sql_prepare($query, 'ssss', $title, $text, $date, $preview_url);
+      .' VALUES (?, ?, NOW(), ?)';
+    sql_prepare($query, 'sss', $title, $text, $preview_url);
   }
   return $db->insert_id;
 }
@@ -100,6 +99,7 @@ function edit_post($id, $title, $text, $preview_url) {
 
   $query .= " WHERE id = $id";
 
+  if (strlen($types) == 0) return [];
   return sql_prepare($query, $types, ...$params);
 }
 

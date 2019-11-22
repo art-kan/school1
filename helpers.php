@@ -1,5 +1,5 @@
 <?php
-prevent_direct(__FILE__);
+// prevent_direct(__FILE__);
 require_once('dbcontrol.php');
 require_once 'vendor/autoload.php';
 
@@ -122,6 +122,133 @@ function format_tel_uz($str) {
     .substr($str, 11, 2);
 }
 
+function filter_not_strict_null($array) {
+  $result = [];
+  foreach ($array as $key => $value) {
+    if ($value != Null) {
+      $result[$key] = $value;
+    }
+  }
+  return $result;
+}
+
+function get_post_preview_url($post_id) {
+  $query = 'SELECT preview_url FROM posts WHERE id = ?';
+  return sql_prepare($query, 'd', $post_id)[0]['preview_url'];
+}
+
+// TODO: WRITE get_texts function
+function get_text($name, $loc) {
+  if (!preg_match('/[^A-Za-z0-9]/', $loc)) {
+    // ASSERT $loc CONTAINS ONLY ENGLISH LETTERS & DIGITS
+    $query =
+      "SELECT title_$loc, content_$loc FROM texts WHERE name = ?";
+    $result = sql_prepare($query, 's', $name)[0];
+    return [
+      'title' => $result["title_$loc"],
+      'content' => $result["content_$loc"],
+    ];
+  }
+
+  throw new Exception('Insafe value of $loc (used for language)', 1);
+}
+
+function get_rooms($loc) {
+  global $db;
+  if (!preg_match('/[^A-Za-z0-9]/', $loc)) {
+    // ASSERT $loc CONTAINS ONLY ENGLISH LETTERS & DIGITS
+    $query = "SELECT picture_url, description_$loc FROM rooms "
+      .'ORDER BY n_order ASC';
+    $result = $db->query($query);
+    $rooms = [];
+    while($row = $result->fetch_assoc()) {
+      $rooms[] = [
+        'picture_url' => $row["picture_url"],
+        'description' => $row["description_$loc"],
+      ];
+    }
+    return $rooms;
+  }
+}
+
+function check_no_mysql_error() {
+  global $db;
+  return $db->error == Null;
+}
+
+function make_update_query(
+  $tb_name, $max_types, $crud_assoc_data, $assoc_cond = []
+) {
+  if (preg_match('/[^A-Za-z0-9]/', $tb_name)) {
+    throw new Exception('Insecure table name.', 1);
+  }
+
+  $q_leading = "UPDATE $tb_name";
+
+  $assoc_data = [];
+  $params = [];
+  $types = [];
+  $ind = 0;
+
+  foreach ($crud_assoc_data as $key => $value) {
+    if ($value != Null) {
+      $types[] = $max_types[$ind++];
+      $assoc_data[$key] = $value;
+      $params[] = $value;
+    }
+  }
+
+  foreach ($assoc_cond as $key => $value) {
+    $types[] = $max_types[$ind++];
+    $params[] = $value;
+  }
+
+  if (count($assoc_data) == 0) {
+    return False;
+  }
+
+  $q_update_set_part = format_comma_key_equal_qmark($assoc_data);
+  $q_where_part = format_comma_key_equal_qmark($assoc_cond);
+
+  if (strlen($q_where_part) > 0) {
+    $query = "$q_leading SET $q_update_set_part WHERE $q_where_part";
+  } else {
+    $query = "$q_leading SET $q_update_set_part";
+  }
+
+  return [
+    'query' => $query,
+    'types' => join($types),
+    'params' => $params,
+  ];
+}
+
+function format_comma_key_equal_qmark($assoc_data) {
+  $q_update = [];
+
+  foreach ($assoc_data as $key => $name) {
+    $q_update[$key] = '?';
+  }
+
+  return format_comma_equations($q_update);
+}
+
+// 'f1 = v1, f2 = v2, f3 = v3, ..., fn = vn';
+function format_comma_equations($assoc_arr) {
+  $result = '';
+  $comma_req = False;
+
+  foreach ($assoc_arr as $key => $value) {
+    if ($comma_req) {
+      $result .= ', ';
+    }
+    $result .= "$key = $value";
+    $comma_req = True;
+  }
+
+  return $result;
+}
+
 function sql_prepare($template, $params_type, ...$params) {
   global $db;
   $stmt = $db->prepare($template);
@@ -164,7 +291,7 @@ function is_our_link($url) {
   $host_of_preview = parse_url($url, PHP_URL_HOST);
   $our_host = $_SERVER['SERVER_NAME'];
 
-  return $host_of_preview != $our_host;
+  return $host_of_preview == $our_host;
 }
 
 ?>

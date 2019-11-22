@@ -11,50 +11,35 @@
   </header>
   <!-- SLIDER_SECTION end -->
 
+  <?php
+    $posts = get_last_posts_preview(5, 100);
+    $first_two = array_slice($posts, 0, 2);
+    $next_three = array_slice($posts, 2, 3);
+
+    $welcome_text = get_text('welcome', 'ru');
+  ?>
+
   <section id="welcome-section" class="welcome-section">
     <div class="container">
       <div class="welcome-box">
         <div class="welcome-box-item welcome-phrase-box">
           <img src="img/director.jpg">
-          <h2>Добро пожаловать в нашу школу</h2>
-          <p>
-            Добро пожаловать на официальный сайт средней школы №1 г.Нурафшан. <br>
-
-            Сдесь вы можете найти много интересных сведеньей и статей о нашей школе, так же вы можете узнать в онлайн режиме последние школьные новости!
-
-          </p>
-          <a href="#">Читать дальше</a>
+          <h2><?= s($welcome_text['title']); ?></h2>
+          <p><?= purify($welcome_text['content']); ?></p>
         </div>
         <div class="welcome-box-item last-events">
           <h2>Наши события</h2>
           <ul class="last-events-list">
-            <li>
-              <div class="small-event-box">
-                <p class="event-date">4 сентября 2019</p>
-                <h3 class="event-name">Первый звонок</h3>
-                <p class="event-short-desc">
-
-                4 сентября наша школа встречает новый учебный год, для многих первоклассников это волнительный
-                праздник
-
-                </p>
-                <a href="#" class="read-more">Читать дальше</a>
-              </div>
-            </li>
-            <li>
-              <div class="small-event-box">
-                <p class="event-date">1 октября 2019</p>
-                <h3 class="event-name">Школа запускает официальный сайт</h3>
-                <p class="event-short-desc">
-
-               1 октября 2019 мы празднуем старт нашего официального сайта которые создали ученики нашей 
-               школы!
-
-               </p>
-
-                <a href="#" class="read-more">Читать дальше</a>
-              </div>
-            </li>
+            <?php foreach ($first_two as $post): ?>
+              <li>
+                <div class="small-event-box">
+                  <p class="event-date"><?= s(format_date($post['date'])); ?></p>
+                  <h3 class="event-name"><?= s($post['title']); ?></h3>
+                  <p class="event-short-desc"><?= purify(substr(strip_tags($post['text']), 0, 250).'...'); ?></p>
+                  <a href="/post.php?id=<?= $post['id']; ?>" class="read-more">Читать дальше</a>
+                </div>
+              </li>
+            <?php endforeach; ?>
           </ul>
         </div>
       </div>
@@ -65,11 +50,15 @@
     <div class="container">
       <h2 class="heading">Новости и события</h2>
       <?php
-        $posts = get_last_posts_preview(2, 100);
-        foreach($posts as $post) {
+        foreach($next_three as $post) {
           require('post-box.php');
         }
       ?>
+      <?php if (1 || count($next_three) == 3): ?>
+        <div class="link-view-all-wrapper">
+          <a href="/news.php" class="link-view-all">Смотреть все</a>
+        </div>
+      <?php endif; ?>
     </div>
   </section>
 
@@ -77,7 +66,7 @@
 
   <script src="scripts/simple-slider.js"></script>
   <script>
-    // Example usage
+
     createSimpleSlider({
       id: 'simple-slider',
       imageUrls: [

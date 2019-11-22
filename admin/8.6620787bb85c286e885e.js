@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[8],{"m/Au":function(module,__webpack_exports__,__webpack_require__){"use strict";__webpack_require__.r(__webpack_exports__),__webpack_require__.d(__webpack_exports__,"PostsManagerRoutingModule",(function(){return PostsManagerRoutingModule}));class PostsManagerRoutingModule{}}}]);

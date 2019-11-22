@@ -39,7 +39,7 @@
         <p class="contact-declaration">Вы можете задать нам любой вопрос по телефону: <span><?= s(format_tel_uz($contacts['tel'])); ?></span> (с 9:00 до 18:00).</p>
 
         <div class="contact-details">
-          <div class="contact-address">О.Шарафуддинова 1и г.Нурафшон</div>
+          <div class="contact-address"><?= s($contacts['address']); ?></div>
           <div class="contact-tel">Телефон: <?= s(format_tel_uz($contacts['tel'])); ?></div>
           <div class="contact-email">Email: <?= s($contacts['gmail']); ?></div>
         </div>

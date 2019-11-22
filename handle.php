@@ -28,13 +28,12 @@ function send_400() {
   die();
 }
 
-
 function handle_request($_REQUEST_DATA, $_BODY, $_PARAMS) {
   if (@$_REQUEST_DATA['action'] != 'auth' &&
       @$_REQUEST_DATA['action'] != 'checkauth' &&
      (!isset($_REQUEST_DATA['key']) ||
       !check_admin_key($_REQUEST_DATA['key']))) {
-    return http_response_code(401);
+    // return http_response_code(401);
   }
 
   switch (@$_REQUEST_DATA['action']) {
@@ -48,6 +47,8 @@ function handle_request($_REQUEST_DATA, $_BODY, $_PARAMS) {
     case 'editpost': return update_post($_BODY);
     case 'getcontacts': return send_contacts();
     case 'editcontacts': return update_contacts($_BODY);
+    case 'listtexts': return send_texts();
+    case 'edittext': return update_text($_BODY);
     default: send_400();
   }
 }
@@ -69,7 +70,9 @@ function auth_admin($_BODY) {
 }
 
 function check_admin($_BODY) {
-  echo json_encode([ 'ok' => check_admin_key($_BODY['key'])]);
+  echo json_encode([
+    'ok' => isset($_BODY['key']) && check_admin_key($_BODY['key']),
+  ]);
 }
 
 function check_admin_key($attempt_key) {
@@ -152,7 +155,11 @@ function create_post($_BODY) {
   $text = purify($crud_text);
   $id = new_post($title, $text, $crud_preview_url);
 
-  echo json_encode([ 'ok' => 1, 'id' => $id ]);
+  if (check_no_mysql_error()) {
+    echo json_encode([ 'ok' => 1, 'id' => $id ]);
+  } else {
+    echo json_encode([ 'ok' => 0 ]);
+  }
 }
 
 function update_post($_BODY) {
@@ -170,11 +177,15 @@ function update_post($_BODY) {
   $title = @s($crud_new_title);
   $text = @purify($crud_new_text);
 
-  if (is_our_link($crud_preview_url)) {
+  if ($crud_preview_url != Null && is_our_link($crud_preview_url)) {
     $preview_url = $crud_preview_url;
   }
 
   edit_post($post_id, $title, $text, $preview_url);
+  $cur_preview_url = parse_url(
+    $preview_url ?: get_post_preview_url($post_id),
+    PHP_URL_PATH
+  );
 
   $dom = new Dom();
   $imgsInUse = [];
@@ -189,12 +200,13 @@ function update_post($_BODY) {
   }
 
   foreach ($allImgs as $path) {
-    if (!in_array("/$path", $imgsInUse)) {
+    if (!in_array("/$path", $imgsInUse) &&
+       "/$path" != $cur_preview_url) {
       unlink($path);
     }
   }
 
-  echo json_encode([ 'ok' => 1, 'use' => $imgsInUse, 'all' => $allImgs ]);
+  echo json_encode([ 'ok' => check_no_mysql_error() ? 1 : 0 ]);
 }
 
 function delete_post($_PARAMS) {
@@ -205,7 +217,7 @@ function delete_post($_PARAMS) {
   $id = $_PARAMS['id'];
   remove_post($id);
   array_map('unlink', glob(upload_image_dir."/{$id}_*"));
-  echo json_encode([ 'ok' => 1 ]);
+  echo json_encode([ 'ok' => check_no_mysql_error() ? 1 : 0 ]);
 }
 
 function send_contacts() {
@@ -221,7 +233,55 @@ function update_contacts($_BODY) {
   }
 
   edit_contacts($new_contacts);
-  echo json_encode([ 'ok' => 1 ]);
+  echo json_encode([ 'ok' => check_no_mysql_error() ? 1 : 0 ]);
+}
+
+function send_texts() {
+  global $db;
+  $res = $db->query('SELECT title_ru FROM texts');
+  $result = [];
+  while ($row = $res->fetch_assoc()) {
+    $result[] = $row;
+  }
+  echo json_encode($result);
+}
+
+function update_text($_BODY) {
+  if (!isset($_BODY['name'])) {
+    return send_400();
+  }
+
+  $name = $_BODY['name'];
+  $crud_picture_url = @$_BODY['picture_url'];
+  $new_title_ru = @$_BODY['title_ru'];
+  $new_content_ru = @$_BODY['content_ru'];
+  $picture_url = Null;
+
+  if ($new_title_ru == Null && $new_content_ru == Null) {
+    return send_400();
+  }
+
+  if (is_our_link($crud_picture_url)) {
+    $picture_url = $crud_picture_url;
+  }
+
+  $q_update = make_update_query('texts', 'ssss', [
+    'title_ru' => @$_BODY['title_ru'],
+    'content_ru' => @$_BODY['content_ru'],
+    'picture_url' => $picture_url,
+  ], [
+    'name' => @$_BODY['name'],
+  ]);
+
+  $query = $q_update['query'];
+  $types = $q_update['types'];
+  $params = $q_update['params'];
+
+  if ($query == False) return send_400();
+
+  sql_prepare($query, $types, ...$params);
+
+  echo json_encode([ 'ok' => check_no_mysql_error() ? 1 : 0 ]);
 }
 
 ?>
