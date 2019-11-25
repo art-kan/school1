@@ -47,6 +47,7 @@ function handle_request($_REQUEST_DATA, $_BODY, $_PARAMS) {
     case 'editpost': return update_post($_BODY);
     case 'getcontacts': return send_contacts();
     case 'editcontacts': return update_contacts($_BODY);
+    case 'gettext': return send_text($_PARAMS);
     case 'listtexts': return send_texts();
     case 'edittext': return update_text($_BODY);
     default: send_400();
@@ -236,9 +237,24 @@ function update_contacts($_BODY) {
   echo json_encode([ 'ok' => check_no_mysql_error() ? 1 : 0 ]);
 }
 
+function send_text($_PARAMS) {
+  if (!isset($_PARAMS['name'])) {
+    return send_400();
+  }
+
+  $q = 'SELECT title_ru, content_ru FROM texts WHERE name = ?';
+  $r = sql_prepare($q, 's', $_PARAMS['name']);
+  if ($r == Null || !isset($r[0])) {
+    echo json_encode([ 'ok' => 0 ]);
+  } else {
+    $r[0]['ok'] = 1;
+    echo json_encode($r[0]);
+  }
+}
+
 function send_texts() {
   global $db;
-  $res = $db->query('SELECT title_ru FROM texts');
+  $res = $db->query('SELECT name, title_ru FROM texts');
   $result = [];
   while ($row = $res->fetch_assoc()) {
     $result[] = $row;

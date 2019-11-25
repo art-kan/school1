@@ -108,10 +108,9 @@ function purify($html) {
 
 function format_date($str) {
   $yyyy = substr($str, 0, 4);
-  $mm = (int) substr($str, 6, 2);
+  $mm = (int) substr($str, 5, 2);
   $dd = substr($str, 8, 2);
-
-  return $dd.' '.months_ru[$mm].' '.$yyyy;
+  return $dd.' '.months_ru[$mm - 1].' '.$yyyy;
 }
 
 function format_tel_uz($str) {

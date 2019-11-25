@@ -64,7 +64,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "" + ({"core-core-module":"core-core-module","loginscreen-loginscreen-module":"loginscreen-loginscreen-module","default~plugins-contacts-manager-contacts-manager-module~plugins-posts-manager-posts-manager-module":"default~plugins-contacts-manager-contacts-manager-module~plugins-posts-manager-posts-manager-module","plugins-contacts-manager-contacts-manager-module":"plugins-contacts-manager-contacts-manager-module","plugins-posts-manager-posts-manager-module":"plugins-posts-manager-posts-manager-module"}[chunkId]||chunkId) + ".js"
+/******/ 		return __webpack_require__.p + "" + ({"core-core-module":"core-core-module","loginscreen-loginscreen-module":"loginscreen-loginscreen-module","default~plugins-contacts-manager-contacts-manager-module~plugins-posts-manager-posts-manager-module~~9bbccd02":"default~plugins-contacts-manager-contacts-manager-module~plugins-posts-manager-posts-manager-module~~9bbccd02","plugins-contacts-manager-contacts-manager-module":"plugins-contacts-manager-contacts-manager-module","plugins-posts-manager-posts-manager-module":"plugins-posts-manager-posts-manager-module","plugins-texts-manager-texts-manager-module":"plugins-texts-manager-texts-manager-module","plugins-rooms-manager-rooms-manager-module":"plugins-rooms-manager-rooms-manager-module"}[chunkId]||chunkId) + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function

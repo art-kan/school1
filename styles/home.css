@@ -53,7 +53,7 @@ body {
 
 .welcome-phrase-box img {
   margin: auto;
-  max-height: 230px;
+  max-height: 510px;
   display: block;
 }
 
@@ -65,7 +65,7 @@ body {
 
 .welcome-phrase-box p {
   line-height: 22.4px;
-  margin-bottom: 29px;
+  margin-bottom: .5em;
 }
 
 .welcome-phrase-box a {
@@ -97,6 +97,7 @@ body {
 
 .small-event-box .event-name {
   color: #fff;
+  line-height: 1.5em;
   font-size: 14px;
   margin-bottom: 8px;
   margin-top: 10px;

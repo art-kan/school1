@@ -29,6 +29,12 @@
   color: #3D414E;
 }
 
+.post-preview {
+  margin: 5px 0;
+  display: flex;
+  justify-content: center;
+}
+
 .post-body {
   font-size: 20px;
   color: #111;

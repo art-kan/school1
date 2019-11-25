@@ -17,7 +17,7 @@
         <div class="director-box-bottom">
           <div class="director_content_box">
             <div class="director_img">
-              <img src="img/director.jpg" class="clearfix">
+              <img src="img/director-h.jpg" class="clearfix">
             </div>
           </div>
           <div class="director_poragraph">

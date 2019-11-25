@@ -289,6 +289,9 @@ const routes = [
     {
         path: '', loadChildren: () => __webpack_require__.e(/*! import() | core-core-module */ "core-core-module").then(__webpack_require__.bind(null, /*! ./core/core.module */ "./src/app/core/core.module.ts"))
             .then((mod) => mod.CoreModule)
+    },
+    {
+        path: '**', redirectTo: '',
     }
 ];
 let AppRoutingModule = class AppRoutingModule {
@@ -503,7 +506,7 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_2__["platformB
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /home/kan/legov/sadmin/src/main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! /home/prog/s/src/main.ts */"./src/main.ts");
 
 
 /***/ })

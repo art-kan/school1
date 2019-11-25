@@ -30,41 +30,32 @@
 
 <script src="scripts/gallery.js"></script>
 <script>
-  // RANDOM IMAGES
-  const imagesData = [];
+  const names = [
+    '1.jpg', '20191101_141126.jpg',
+    '20190928_120805.jpg', '20191101_141821(0).jpg',
+    '20191003_111951.jpg', '20191107_095335.jpg',
+    '20191003_115223.jpg', '20191107_100117.jpg',
+    '20191010_113638.jpg', 'photo_2019-11-23_13-50-08.jpg',
+    '20191025_110055.jpg', 'photo_2019-11-23_13-52-24.jpg',
+    '20191025_130724_001.jpg', 'photo_2019-11-23_13-54-41.jpg',
+    '20191025_131111.jpg', 'photo_2019-11-23_13-54-59.jpg',
+    '20191101_140455.jpg', 'photo_2019-11-23_13-55-05.jpg',
+    '20191101_140738.jpg', 'photo_2019-11-23_13-55-11.jpg',
+  ];
 
-  function getRandomSize(min, max) {
-    return Math.round(Math.random() * (max - min) + min);
-  }
-
-  for (let i = 0; i < 25; i++) {
-    const width = 400 + getRandomSize(120.0, 720.0);
-    const height = 200 + getRandomSize(72.0, 480.0);
-    const url = 'https://picsum.photos/' + width + '/' + height + '?t=' + performance.now();
-    const fullUrl = 'https://picsum.photos/' + (width * 2) + '/' + (height * 2) + '?t=' + performance.now();
-    const desc = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.';
-    imagesData.push({ url, fullUrl, desc });
-  }
+  const imagesData = names.map((name) => {
+    return {
+      url: `/img/gallery/${name}`,
+      fullUrl: `/img/gallery/${name}`,
+      desc: '',
+    };
+  });
 
   createGallery({
     id: 'gallery',
     popupId: 'popup',
     imagesData,
   });
-
-  // CUSTOM USAGE
-  // createGallery({
-  //   id: 'gallery',
-  //   popupId: 'popup',
-  //   imagesData: [
-  //     {
-  //       url: 'path/to/small/image',
-  //       fullUrl: 'path/to/full/image',
-  //       desc: 'This text is description of the image',
-  //     },
-  //     // ..
-  //   ],
-  // });
 </script>
 
 </body>
