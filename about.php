@@ -67,14 +67,6 @@
     </section>
     <section class="history">
       <div class="history_container">
-        <!--
-          <div class="box_tit">
-            <h2>О нашей школе</h2>
-          </div>
-          <blockquote class="box-tit-q">
-            <p><q>Спираль времен бесконечна, и сменяющие её друг друга поколения лишь восходят словно по лестнице, от ступени к ступени. Каждое поколение передает накопленный опыт следующиму поколению, которое будет развивать и обогащать его в дальнешем.</q></p>
-          </blockquote>
-        -->
         <div class="history-block">
           <h2><?= s($short_history['title']); ?></h2>
           <?= purify($short_history['content']); ?>

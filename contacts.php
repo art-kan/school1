@@ -9,27 +9,21 @@
       <div class="contact_tit">
         <h2>Свяжитесь с нами</h2>
       </div>
-      <!--
-      <div class="contact_content">
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-          consequat.
-        </p>
-      </div>
-      -->
     </div>
 
     <div class="forms_box">
       <div class="left_box">
         <p>По любым вопросам вы можете связатся со школьной администрацией</p>
-        <form class="form">
+        <form class="form" method="post" action="mail.php">
           <input type="text" name="name" placeholder="Ваше имя *" required>
           <input type="email" name="email" placeholder="Ваша e-почта *" required>
           <input type="text" name="subject" placeholder="Тема">
-          <textarea placeholder="Письмо *" required></textarea>
-          <button type="submit" class="clearfix">Отправить</button>
+          <textarea
+            name="body"
+            placeholder="Письмо *"
+            required
+          ></textarea>
+          <button type="submit" name="submit" class="clearfix">Отправить</button>
         </form>
       </div>
 

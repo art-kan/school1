@@ -1,5 +1,5 @@
 <?php
-// prevent_direct(__FILE__);
+
 require_once('dbcontrol.php');
 require_once 'vendor/autoload.php';
 
@@ -291,6 +291,11 @@ function is_our_link($url) {
   $our_host = $_SERVER['SERVER_NAME'];
 
   return $host_of_preview == $our_host;
+}
+
+function redirect($url) {
+  header('Location: '.SERVER_URL."/$url");
+  die();
 }
 
 ?>

@@ -33,7 +33,7 @@ function handle_request($_REQUEST_DATA, $_BODY, $_PARAMS) {
       @$_REQUEST_DATA['action'] != 'checkauth' &&
      (!isset($_REQUEST_DATA['key']) ||
       !check_admin_key($_REQUEST_DATA['key']))) {
-    // return http_response_code(401);
+    return http_response_code(401);
   }
 
   switch (@$_REQUEST_DATA['action']) {
@@ -112,7 +112,7 @@ function upload_image($_BODY) {
 
     if ($success) {
       $uploaded++;
-      $filepaths[$name] = $PROTOCOL.$_SERVER['HTTP_HOST'].'/'.$filepath;
+      $filepaths[$name] = SERVER_URL.'/'.$filepath;
     }
   }
 

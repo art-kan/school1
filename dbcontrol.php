@@ -1,14 +1,10 @@
 <?php
 
 require_once('helpers.php');
+require_once('config.php');
 prevent_direct(__FILE__);
 
-const username = 'kan';
-const password = 'jkd';
-const dbname = 'schooldb';
-const serveruri = 'localhost';
-
-$db = new mysqli(serveruri, username, password, dbname);
+$db = new mysqli(DB_URI, DB_USERNAME, DB_PASSWORD, DB_NAME);
 $db->set_charset('utf8');
 
 if ($db->connect_error) {
