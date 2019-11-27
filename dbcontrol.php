@@ -93,7 +93,9 @@ function edit_post($id, $title, $text, $preview_url) {
     $types .= 's';
   }
 
-  $query .= " WHERE id = $id";
+  $query .= " WHERE id = ?";
+  $types .= 'd';
+  $params[] = $id;
 
   if (strlen($types) == 0) return [];
   return sql_prepare($query, $types, ...$params);

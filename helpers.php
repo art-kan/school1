@@ -287,10 +287,10 @@ function generate_crypto_key($bytes) {
 }
 
 function is_our_link($url) {
-  $host_of_preview = parse_url($url, PHP_URL_HOST);
-  $our_host = $_SERVER['SERVER_NAME'];
+  $origin_of_preview = parse_url($url, PHP_URL_SCHEME)
+    .'://'.parse_url($url, PHP_URL_HOST);
 
-  return $host_of_preview == $our_host;
+  return $origin_of_preview == SERVER_URL;
 }
 
 function redirect($url) {
