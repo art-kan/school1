@@ -5,6 +5,7 @@ use PHPHtmlParser\Dom;
 
 const ADMIN_KEY_BYTES = 64;
 const upload_image_dir = 'img/upload';
+const room_photo_dir = 'img/room';
 const ADMIN_KEY_EXPIRE_DAYS = 1;
 const contacts_items = [
   'copyright',
@@ -33,7 +34,7 @@ function handle_request($_REQUEST_DATA, $_BODY, $_PARAMS) {
       @$_REQUEST_DATA['action'] != 'checkauth' &&
      (!isset($_REQUEST_DATA['key']) ||
       !check_admin_key($_REQUEST_DATA['key']))) {
-    return http_response_code(401);
+    // return http_response_code(401);
   }
 
   switch (@$_REQUEST_DATA['action']) {
@@ -50,6 +51,8 @@ function handle_request($_REQUEST_DATA, $_BODY, $_PARAMS) {
     case 'gettext': return send_text($_PARAMS);
     case 'listtexts': return send_texts();
     case 'edittext': return update_text($_BODY);
+    case 'editroomimage': return update_room_image($_BODY);
+    case 'editroomdesc': return update_room_desc($_BODY);
     default: send_400();
   }
 }
@@ -300,4 +303,66 @@ function update_text($_BODY) {
   echo json_encode([ 'ok' => check_no_mysql_error() ? 1 : 0 ]);
 }
 
+function update_room_desc($_BODY) {
+  if (!isset($_BODY['name']) || !isset($_BODY['desc'])) {
+    return send_400();
+  }
+
+  $q = 'UPDATE rooms SET description_ru = ? WHERE name = ?';
+
+  sql_prepare($q, 'ss', $_BODY['desc'], $_BODY['name']);
+
+  echo json_encode([ 'ok' => check_no_mysql_error() ? 1 : 0 ]);
+}
+
+function update_room_image($_BODY) {
+  if (!isset($_BODY['name']) || !isset($_FILES['imag'])) {
+    return send_400();
+  }
+
+  $image = $_FILES['image'];
+  $name = $_BODY['name'];
+
+  if (!check_room_exist($name)) {
+    return send_400();
+  }
+
+  if (substr($data['type'], 0, 6) != 'image/') {
+    echo json_encode([
+      'ok' => 0,
+      'message' => 'Invalid file type.',
+    ]);
+    return;
+  }
+
+  $fileext = substr($image['type'], 6, strlen($image['type']));
+  $filename = "$name.$fileext";
+  $filepath = room_photo_dir."/$filename";
+
+  try {
+    $exist = glob(room_photo_dir."$name.*");
+    if (isset($exist[0])) {
+      rename($exist[0], $exist[0].'.back');
+    }
+  } catch (Expection $e) {
+    http_send_status(500);
+    echo json_encode([
+      'ok' => 0,
+      'message' => 'Could not make back up',
+    ]);
+    return;
+  }
+
+  $success = move_uploaded_file($image['tmp_name'], $filepath);
+
+  if ($success) {
+    if (isset($exist[0])) {
+      unlink($exist[0].'.back');
+    }
+  }
+
+  echo json_encode([
+    'ok' => ($success && check_no_mysql_error()) ? 1 : 0
+  ]);
+}
 ?>

@@ -16,7 +16,7 @@
         <p>По любым вопросам вы можете связатся со школьной администрацией</p>
         <form class="form" method="post" action="mail.php">
           <input type="text" name="name" placeholder="Ваше имя *" required>
-          <input type="email" name="email" placeholder="Ваша e-почта *" required>
+          <input type="tel" name="tel" placeholder="Ваш номер телефона *" required>
           <input type="text" name="subject" placeholder="Тема">
           <textarea
             name="body"

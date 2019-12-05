@@ -11,18 +11,19 @@
   }
 
   if (
-    !(isset($_POST['email'])) ||
+    !(isset($_POST['tel'])) ||
     !(isset($_POST['name'])) ||
     !(isset($_POST['body']))
   ) {
     redirect('contacts.php');
   }
 
-  $email = $_POST['email'];
+  $tel = $_POST['tel'];
   $name = $_POST['name'];
   $body = $_POST['body'];
 
   $mail = new PHPMailer;
+  $mail->CharSet = 'UTF-8';
   $mail->isSMTP();
   // $mail->SMTPDebug = SMTP::DEBUG_SERVER;
   $mail->Host = 'smtp.gmail.com';
@@ -32,14 +33,14 @@
   $mail->Username = GMAIL_USER;
   $mail->Password = GMAIL_PASS;
 
-  $mail->setFrom($email, $name);
+  $mail->setFrom(GMAIL_USER, $name);
   $mail->addAddress(GMAIL_USER, 'MySelf');
 
   if (isset($_POST['subject'])) {
     $mail->Subject = $_POST['subject'];
   }
 
-  $mail->Body = $body;
+  $mail->Body = "$tel\n.$body";
 
   if (!$mail->send()):
 ?>

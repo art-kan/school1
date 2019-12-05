@@ -1,5 +1,7 @@
 <?php
 
+header_remove('X-Powered-By');
+
 require_once('dbcontrol.php');
 require_once 'vendor/autoload.php';
 
@@ -251,6 +253,12 @@ function format_comma_equations($assoc_arr) {
 function sql_prepare($template, $params_type, ...$params) {
   global $db;
   $stmt = $db->prepare($template);
+
+  if ($stmt === false) {
+    trigger_error($db->error, E_USER_ERROR);
+    return;
+  }
+
   $stmt->bind_param($params_type, ...$params);
   $stmt->execute();
   $result = $stmt->get_result();
@@ -291,6 +299,12 @@ function is_our_link($url) {
     .'://'.parse_url($url, PHP_URL_HOST);
 
   return $origin_of_preview == SERVER_URL;
+}
+
+function check_room_exist($name) {
+  $q = 'SELECT id FROM rooms WHERE name = ?';
+  $r = sql_prepare($q, 's', $name);
+  return $r != Null && isset($r[1]);
 }
 
 function redirect($url) {
