@@ -59,7 +59,8 @@
               <?php endif; ?>
             </div>
           <?php endforeach; ?>
-       <div id="slider-control">
+        </div>
+        <div id="slider-control">
           <button id="slider-to-prev" class="slider-to-prev">Предыдущий</button>
           <button id="slider-to-next" class="slider-to-next">Следующий</button>
         </div>
