@@ -181,7 +181,7 @@ function update_post($_BODY) {
   $title = @s($crud_new_title);
   $text = @purify($crud_new_text);
 
-  if ($crud_preview_url != Null && is_our_link($crud_preview_url)) {
+  if ($crud_preview_url != Null && is_local_url($crud_preview_url)) {
     $preview_url = $crud_preview_url;
   }
 

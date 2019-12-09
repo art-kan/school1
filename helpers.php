@@ -294,6 +294,11 @@ function generate_crypto_key($bytes) {
   return bin2hex($key);
 }
 
+function is_local_url($url) {
+  return substr($url, 0, 7) === 'http://' ||
+    substr($url, 0, 8) === 'https://';
+}
+
 function is_our_link($url) {
   $origin_of_preview = parse_url($url, PHP_URL_SCHEME)
     .'://'.parse_url($url, PHP_URL_HOST);
