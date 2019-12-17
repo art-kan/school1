@@ -365,4 +365,5 @@ function update_room_image($_BODY) {
     'ok' => ($success && check_no_mysql_error()) ? 1 : 0
   ]);
 }
+
 ?>
