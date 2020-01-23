@@ -24,6 +24,7 @@
       <div class="welcome-box">
         <div class="welcome-box-item welcome-phrase-box">
           <img src="img/director.jpg">
+          <p style="font-style: italic; text-align: right; margin-top: 1em;">Директор, Ли Н. А.</p>
           <h2><?= s($welcome_text['title']); ?></h2>
           <p><?= purify($welcome_text['content']); ?></p>
         </div>

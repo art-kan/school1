@@ -57,15 +57,16 @@ body {
   display: block;
 }
 
-.welcome-phrase-box h2 {
+.welcome-phrase-box h2 {hh
   margin-top: 30px;
   margin-bottom: 18px;
-  font-size: 26px;
+  font-size: 24px;
 }
 
 .welcome-phrase-box p {
   line-height: 22.4px;
   margin-bottom: .5em;
+  font-size: 15px;
 }
 
 .welcome-phrase-box a {
@@ -85,7 +86,7 @@ body {
 }
 
 .small-event-box {
-  color: #959CB2;
+  color: #fff;
 }
 .last-events-list > li {
   flex: 1 1 100%;
@@ -98,19 +99,21 @@ body {
 .small-event-box .event-name {
   color: #fff;
   line-height: 1.5em;
-  font-size: 14px;
+  font-size: 18px;
+  font-weight: bold;
   margin-bottom: 8px;
   margin-top: 10px;
-  font-weight: 400;
 }
 
 .small-event-box .event-date {
   margin-bottom: 6px;
+  opacity: 0.75;
 }
 
 .small-event-box .event-short-desc {
   line-height: 1.6em;
   margin-bottom: 23px;
+  opacity: 0.75;
 }
 
 .small-event-box .read-more {
