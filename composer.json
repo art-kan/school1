@@ -2,6 +2,8 @@
     "require": {
         "ezyang/htmlpurifier": "^4.12",
         "paquettg/php-html-parser": "^2.1",
-        "phpmailer/phpmailer": "^6.1"
+        "phpmailer/phpmailer": "^6.1",
+        "usmanhalalit/pixie": "^2.0",
+        "gumlet/php-image-resize": "^1.9"
     }
 }

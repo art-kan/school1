@@ -7,5 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'stringEncode' => array($vendorDir . '/paquettg/string-encode/src'),
+    'Viocon' => array($vendorDir . '/usmanhalalit/viocon/src'),
+    'Pixie' => array($vendorDir . '/usmanhalalit/pixie/src'),
     'HTMLPurifier' => array($vendorDir . '/ezyang/htmlpurifier/library'),
 );

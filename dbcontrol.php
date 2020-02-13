@@ -125,8 +125,57 @@ function new_admin_key($key) {
 
 // DELETE
 function remove_post($id) {
-  global $db;
   sql_prepare('DELETE FROM posts WHERE id = ?', 'd', $id);
+}
+
+
+///////////////////////////////////////////////////////////////////
+// GALLERY
+
+function get_photo_paths($skip, $limit) {
+  return array_map(function ($el) {
+    return $el["filename"];
+  }, sql_prepare(
+    'SELECT filename FROM gallery '.
+    'ORDER BY `date` desc '.
+    'LIMIT ?, ?',
+    'dd',
+    $skip, $limit
+  ));
+}
+
+function list_photos() {
+  global $db;
+  $result = $db->query('SELECT filename FROM gallery');
+  $answer = [];
+  while ($row = $result->fetch_assoc()) {
+    $answer[] = $row['filename'];
+  }
+  return $answer;
+}
+
+function new_photo($filename, $desc, $category) {
+  sql_prepare(
+    'INSERT INTO gallery (filename, `desc`, category, `date`) '.
+    'VALUES (?, ?, ?, NOW())',
+    'sss',
+    $filename, $desc, $category
+  );
+}
+
+function remove_photo() {
+
+}
+
+function edit_photo($filename, $desc, $category) {
+  $qq = make_update_query(
+    'gallery',
+    'sss',
+    [ '`desc`' => $desc, 'category' => $category ],
+    [ 'filename' => $filename ]
+  );
+
+  sql_prepare($qq['query'], $qq['types'], ...$qq['params']);
 }
 
 ?>

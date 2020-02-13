@@ -6,7 +6,9 @@ use PHPHtmlParser\Dom;
 const ADMIN_KEY_BYTES = 64;
 const upload_image_dir = 'img/upload';
 const room_photo_dir = 'img/room';
+const gallery_dir = 'img/gallery';
 const ADMIN_KEY_EXPIRE_DAYS = 1;
+const PHOTOS_PER_PAGE = 12;
 const contacts_items = [
   'copyright',
   'tel',
@@ -14,6 +16,12 @@ const contacts_items = [
   'address',
   'telegram',
   'instagram',
+];
+
+const ALLOWED_EVERYONE_REQS = [
+  'auth',
+  'checkauth',
+  'getphotos',
 ];
 
 header('Content-Type: application/json');
@@ -30,29 +38,47 @@ function send_400() {
 }
 
 function handle_request($_REQUEST_DATA, $_BODY, $_PARAMS) {
-  if (@$_REQUEST_DATA['action'] != 'auth' &&
-      @$_REQUEST_DATA['action'] != 'checkauth' &&
-     (!isset($_REQUEST_DATA['key']) ||
-      !check_admin_key($_REQUEST_DATA['key']))) {
-    return http_response_code(401);
+  if (!isset($_REQUEST_DATA['key'])) {
+    // return send_401();
   }
+
+  // FOR DEV PURPOSE ONLY
+
+  // $key = $_REQUEST_DATA['key'];
+
+  // if (!in_array($key, ALLOWED_EVERYONE_REQS) &&
+    // !check_admin_key($key)) {
+    // return http_response_code(401);
+  // }
 
   switch (@$_REQUEST_DATA['action']) {
     case 'auth': return auth_admin($_BODY);
     case 'checkauth': return check_admin($_BODY);
+
     case 'uploadimage': return upload_image($_BODY);
+
     case 'getpost': return send_post($_PARAMS);
     case 'listposts': return send_posts_list();
     case 'deletepost': return delete_post($_PARAMS);
     case 'newpost': return create_post($_BODY);
     case 'editpost': return update_post($_BODY);
+
     case 'getcontacts': return send_contacts();
     case 'editcontacts': return update_contacts($_BODY);
+
     case 'gettext': return send_text($_PARAMS);
     case 'listtexts': return send_texts();
     case 'edittext': return update_text($_BODY);
+
     case 'editroomimage': return update_room_image($_BODY);
     case 'editroomdesc': return update_room_desc($_BODY);
+
+    case 'getphotos': return send_photos($_PARAMS);
+    case 'listphotos': return send_list_photos();
+    case 'addphoto': return create_photo($_BODY);
+    case 'editphoto': return update_photo($_BODY);
+    case 'delete': return delete_photo($_PARAMS);
+
     default: send_400();
   }
 }
@@ -364,6 +390,66 @@ function update_room_image($_BODY) {
   echo json_encode([
     'ok' => ($success && check_no_mysql_error()) ? 1 : 0
   ]);
+}
+
+function send_photos($_PARAMS) {
+  $page = isset($_PARAMS['page']) ? $_PARAMS['page'] : 1;
+
+  if (0) {
+    /* check $page */
+    echo json_encode([ 'ok' => 1 ]);
+  }
+
+  $SKIP = ($page - 1) * PHOTOS_PER_PAGE;
+  $LIMIT = PHOTOS_PER_PAGE;
+
+  echo json_encode([
+    'ok' => 1,
+    'pathes' => get_photo_paths($SKIP, $LIMIT),
+  ]);
+}
+
+function send_list_photos() {
+  echo json_encode(list_photos());;
+}
+
+function create_photo($_BODY) {
+  $filename = $_BODY['filename'];
+  $desc = $_BODY['desc'];
+  $category = $_BODY['category'];
+
+  new_photo($filename, $desc, $category);
+
+  echo json_encode([ 'ok' => check_no_mysql_error() ? 1 : 0 ]);
+}
+
+function update_photo($_BODY) {
+  if (isset($_BODY['filename'])) {
+    $filename = $_BODY['filename'];
+  } else {
+    send_400();
+  }
+
+  $desc = NULL;
+  $category = NULL;
+
+  if (isset($_BODY['desc'])) {
+    $desc = $_BODY['desc'];
+  }
+
+  if (isset($_BODY['category'])) {
+    $category = $_BODY['category'];
+  }
+
+  edit_photo($filename, $desc, $category);
+}
+
+function delete_photo($_PARAMS) {
+  if (!isset($_BODY['filename'])) {
+    return send_400();
+  }
+
+  remove_photo($_BODY['filename'] /* or $id */);
 }
 
 ?>

@@ -16,6 +16,10 @@ class ComposerStaticInitba7eb1810ac5855e7b857813cd597f7b
             'PHPMailer\\PHPMailer\\' => 20,
             'PHPHtmlParser\\' => 14,
         ),
+        'G' => 
+        array (
+            'Gumlet\\' => 7,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -27,6 +31,10 @@ class ComposerStaticInitba7eb1810ac5855e7b857813cd597f7b
         array (
             0 => __DIR__ . '/..' . '/paquettg/php-html-parser/src/PHPHtmlParser',
         ),
+        'Gumlet\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/gumlet/php-image-resize/lib',
+        ),
     );
 
     public static $prefixesPsr0 = array (
@@ -35,6 +43,20 @@ class ComposerStaticInitba7eb1810ac5855e7b857813cd597f7b
             'stringEncode' => 
             array (
                 0 => __DIR__ . '/..' . '/paquettg/string-encode/src',
+            ),
+        ),
+        'V' => 
+        array (
+            'Viocon' => 
+            array (
+                0 => __DIR__ . '/..' . '/usmanhalalit/viocon/src',
+            ),
+        ),
+        'P' => 
+        array (
+            'Pixie' => 
+            array (
+                0 => __DIR__ . '/..' . '/usmanhalalit/pixie/src',
             ),
         ),
         'H' => 
